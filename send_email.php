@@ -7,34 +7,35 @@ use PHPMailer\PHPMailer\SMTP;
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
+require 'config.php';
 
 header('Content-Type: application/json');
-
 $name = $_POST['name'] ?? '';
 $email = $_POST['email'] ?? '';
 $company = $_POST['company'] ?? '';
 $phone = $_POST['phone'] ?? '';
+$message = $_POST['message'] ?? '';
 
 $mail = new PHPMailer(true);
 
 try {
 
-    /* SMTP DEBUGGING */
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER; 
+    // Log SMTP debug to file instead of outputting to response (avoids breaking JSON)
+    $mail->SMTPDebug  = SMTP::DEBUG_SERVER;
     $mail->Debugoutput = function($str, $level) {
-        echo "SMTP DEBUG: $str<br>";
+        file_put_contents('/tmp/smtp_debug.log', date('[Y-m-d H:i:s] ') . $str . "\n", FILE_APPEND);
     };
 
     $mail->isSMTP();
-    $mail->Host       = 'smtp.office365.com';
+    $mail->Host       = SMTP_HOST;
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'support@networsys.com';
-    $mail->Password   = 'jdnwsknsdmyhynww';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = 587;
+    $mail->Username   = SMTP_USERNAME;
+    $mail->Password   = SMTP_PASSWORD;
+    $mail->SMTPSecure = SMTP_ENCRYPTION;
+    $mail->Port       = SMTP_PORT;
 
-    $mail->setFrom('support@networsys.com', 'Networsys Website');
-    $mail->addAddress('dwarren@dniservicesllc.com');
+    $mail->setFrom(FROM_EMAIL, FROM_NAME);
+    $mail->addAddress(TO_EMAIL);
 
     /* Reply to user */
     if($email){
@@ -44,7 +45,7 @@ try {
     $mail->isHTML(true);
     $mail->Subject = 'New Zero Trust Assessment Submission';
 
-   $mail->Body = '
+    $mail->Body = '
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,7 +62,7 @@ try {
 <!-- Logo -->
 <tr>
 <td align="center" style="padding:25px 20px;background:#fff8e0;">
-<img src="https://www.dniservicesllc.com/uploads/logo/1750871616_logo.png" alt="DNI Services" style="height:70px;">
+<img src="cid:networsyslogo" alt="Networsys" style="height:70px;">
 </td>
 </tr>
 
@@ -88,26 +89,38 @@ try {
 
 <tr>
 <td style="font-weight:bold;width:120px;color:#555;">Name</td>
-<td style="background:#f9fbfd;border-radius:5px;">'.$name.'</td>
+<td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($name).'</td>
 </tr>
 
 <tr>
 <td style="font-weight:bold;color:#555;">Email</td>
-<td style="background:#f9fbfd;border-radius:5px;">'.$email.'</td>
+<td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($email).'</td>
 </tr>
 
 <tr>
 <td style="font-weight:bold;color:#555;">Company</td>
-<td style="background:#f9fbfd;border-radius:5px;">'.$company.'</td>
+<td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($company).'</td>
 </tr>
 
 <tr>
 <td style="font-weight:bold;color:#555;">Phone</td>
-<td style="background:#f9fbfd;border-radius:5px;">'.$phone.'</td>
+<td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($phone).'</td>
+</tr>
+
+<tr>
+<td style="font-weight:bold;color:#555;">Message</td>
+<td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($message).'</td>
 </tr>
 
 </table>
 
+</td>
+</tr>
+
+<!-- CTA Button (Optional Improvement) -->
+<tr>
+<td align="center" style="padding:10px 30px 25px 30px;">
+<a href="mailto:'.htmlspecialchars($email).'" style="background:#1a73e8;color:#ffffff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;">Reply to Lead</a>
 </td>
 </tr>
 
@@ -127,6 +140,30 @@ This message was generated from the website assessment form.
 </body>
 </html>
 ';
+
+    // Handle PDF Attachment
+    // if (isset($_POST['pdf']) && !empty($_POST['pdf'])) {
+    //     // The PDF is sent as a base64 string (data URI)
+    //     $pdfData = $_POST['pdf'];
+        
+    //     // Remove the data URI scheme prefix if present
+    //     if (strpos($pdfData, 'data:application/pdf;base64,') === 0) {
+    //         $pdfData = substr($pdfData, strpos($pdfData, ',') + 1);
+    //     }
+        
+    //     // Decode the base64 string
+    //     $decodedPdf = base64_decode($pdfData);
+        
+    //     if ($decodedPdf !== false) {
+    //         // Attach the decoded PDF string directly
+    //         $mail->addStringAttachment($decodedPdf, 'Zero_Trust_Assessment_Report.pdf', 'base64', 'application/pdf');
+    //     }
+    // }
+
+    // Embed the local logo image
+    if (file_exists('networsys-logo.png')) {
+        $mail->addEmbeddedImage('networsys-logo.png', 'networsyslogo');
+    }
 
     $mail->send();
 

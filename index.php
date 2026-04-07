@@ -28,7 +28,7 @@
   --warn: #ffb800;
 
   /* Text */
-  --text: #1a2a33;
+  --text: #6d6d6d;
   --muted: #6b8a9b;
 
   /* Extra UI */
@@ -527,6 +527,15 @@ a{
     margin-right: auto;
   }
 
+  .contact-form input{
+    color: #ffe0bf !important;
+  }
+
+    .contact-form textarea{
+    color: #ffe0bf !important;
+  }
+
+
   .form-group {
     margin-bottom: 16px;
     width: 49%;
@@ -699,6 +708,10 @@ a{
       <div class="form-group">
         <label class="form-label">Phone Number</label>
         <input type="tel" class="form-input" id="form-phone">
+      </div>
+      <div class="form-group" style="width:100%;">
+        <label class="form-label">Message</label>
+        <textarea class="form-input form-textarea" id="form-message" placeholder="Tell us about your Zero Trust needs..."></textarea>
       </div>
       <button class="btn btn-primary" onclick="submitContactForm()" style="width:100%; margin-top:16px;">Get a personalized assessment →</button>
     </div>
