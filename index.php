@@ -726,7 +726,6 @@ a{
       <div class="cta-title">Ready to Close These Gaps?</div>
       <p class="cta-text">This assessment was built by <a href="#" target="_blank" class="cta-name">Don Warren</a> — Cybersecurity Consultant Zero Trust Architect & Secure SD-WAN Specialist.<br>Get a personalized ZT implementation workshop for your organization.</p>
       <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-        <a href="#" target="_blank" class="btn btn-primary">Connect on Linkedin →</a>
         <a href="https://wa.me/+14044375635" target="_blank" class="btn btn-primary">Connect on Whatsapp →</a>
         <button class="btn btn-secondary" onclick="restartAssessment()">Retake Assessment</button>
       </div>
