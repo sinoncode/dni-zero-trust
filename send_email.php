@@ -87,27 +87,27 @@ try {
 
 <table width="100%" cellpadding="8" cellspacing="0" style="font-size:15px;color:#333;">
 
-<tr>
+<tr style="margin-top:1rem;">
 <td style="font-weight:bold;width:120px;color:#555;">Name</td>
 <td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($name).'</td>
 </tr>
 
-<tr>
+<tr style="margin-top:1rem;">
 <td style="font-weight:bold;color:#555;">Email</td>
 <td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($email).'</td>
 </tr>
 
-<tr>
+<tr style="margin-top:1rem;">
 <td style="font-weight:bold;color:#555;">Company</td>
 <td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($company).'</td>
 </tr>
 
-<tr>
+<tr style="margin-top:1rem;">
 <td style="font-weight:bold;color:#555;">Phone</td>
 <td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($phone).'</td>
 </tr>
 
-<tr>
+<tr style="margin-top:1rem;">
 <td style="font-weight:bold;color:#555;">Message</td>
 <td style="background:#f9fbfd;border-radius:5px;">'.htmlspecialchars($message).'</td>
 </tr>
@@ -120,7 +120,7 @@ try {
 <!-- CTA Button (Optional Improvement) -->
 <tr>
 <td align="center" style="padding:10px 30px 25px 30px;">
-<a href="mailto:'.htmlspecialchars($email).'" style="background:#1a73e8;color:#ffffff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;">Reply to Lead</a>
+<a href="mailto:'.htmlspecialchars($email).'" style="background:#f7931e;color:#ffffff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;">Reply to Lead</a>
 </td>
 </tr>
 
